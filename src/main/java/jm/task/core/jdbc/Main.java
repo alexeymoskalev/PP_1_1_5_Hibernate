@@ -1,10 +1,13 @@
 package jm.task.core.jdbc;
 
+import jm.task.core.jdbc.service.UserService;
 import jm.task.core.jdbc.service.UserServiceImpl;
 
+import java.sql.SQLException;
+
 public class Main {
-    public static void main(String[] args) {
-        UserServiceImpl userService = new UserServiceImpl();
+    private final static UserService userService = new UserServiceImpl();
+    public static void main(String[] args) throws SQLException {
 
         userService.createUsersTable();
         userService.saveUser("Alexey", "Moskalev", (byte) 29);
