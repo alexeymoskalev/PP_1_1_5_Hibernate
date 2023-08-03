@@ -13,30 +13,37 @@ public class UserDaoJDBCImpl implements UserDao {
 
     }
 
-    public void createUsersTable() throws SQLException {
+    public void createUsersTable()  {
         String sql = "CREATE TABLE IF NOT EXISTS users (id BIGINT PRIMARY KEY AUTO_INCREMENT, name VARCHAR(255), lastName VARCHAR(255), age TINYINT)";
         try (Statement statement = connection.createStatement()) {
             connection.setAutoCommit(false);
             statement.executeUpdate(sql);
             connection.commit();
-        } catch (SQLException e) {
-            connection.rollback();
-            e.printStackTrace();
+        } catch (Exception e) {
+            try {
+                connection.rollback();
+            } catch (SQLException s) {
+                s.printStackTrace();
+            }
         }
     }
 
-    public void dropUsersTable() throws SQLException {
+    public void dropUsersTable() {
         String sql = "DROP TABLE IF EXISTS users";
         try (Statement statement = connection.createStatement()) {
             connection.setAutoCommit(false);
             statement.executeUpdate(sql);
             connection.commit();
         } catch (SQLException e) {
-            connection.rollback();
+            try {
+                connection.rollback();
+            } catch (SQLException s) {
+                s.printStackTrace();
+            }
         }
     }
 
-    public void saveUser(String name, String lastName, byte age) throws SQLException {
+    public void saveUser(String name, String lastName, byte age) {
         String sql = "INSERT INTO users (name, lastName, age) VALUES (?,?,?)";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             connection.setAutoCommit(false);
@@ -46,13 +53,17 @@ public class UserDaoJDBCImpl implements UserDao {
             preparedStatement.executeUpdate();
             connection.commit();
         } catch (SQLException e) {
-            connection.rollback();
+            try {
+                connection.rollback();
+            } catch (SQLException s) {
+                s.printStackTrace();
+            }
         }
     }
 
 
 
-    public void removeUserById(long id) throws SQLException {
+    public void removeUserById(long id) {
         String sql = "DELETE FROM users WHERE ID=?";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             connection.setAutoCommit(false);
@@ -60,15 +71,18 @@ public class UserDaoJDBCImpl implements UserDao {
             preparedStatement.executeUpdate();
             connection.commit();
         } catch (SQLException e) {
-            connection.rollback();
+            try {
+                connection.rollback();
+            } catch (SQLException s) {
+                s.printStackTrace();
+            }
         }
     }
 
-    public List<User> getAllUsers() throws SQLException {
+    public List<User> getAllUsers()  {
         List<User> userList = new ArrayList<>();
         String sql = "SELECT * FROM users";
         try (Statement statement = connection.createStatement()) {
-            connection.setAutoCommit(false);
             ResultSet resultSet = statement.executeQuery(sql);
 
             while (resultSet.next()) {
@@ -79,14 +93,13 @@ public class UserDaoJDBCImpl implements UserDao {
                 user.setAge(resultSet.getByte("age"));
                 userList.add(user);
             }
-            connection.commit();
         } catch (SQLException e) {
-            connection.rollback();
+            e.printStackTrace();
         }
         return userList;
     }
 
-    public void cleanUsersTable() throws SQLException {
+    public void cleanUsersTable() {
 
         String sql = "TRUNCATE TABLE users";
         try (Statement statement = connection.createStatement()) {
@@ -94,7 +107,11 @@ public class UserDaoJDBCImpl implements UserDao {
             statement.executeUpdate(sql);
             connection.commit();
         } catch (SQLException e) {
-            connection.rollback();
+            try {
+                connection.rollback();
+            } catch (SQLException s) {
+                s.printStackTrace();
+            }
         }
     }
 }

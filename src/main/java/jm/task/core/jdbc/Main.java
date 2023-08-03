@@ -6,8 +6,8 @@ import jm.task.core.jdbc.service.UserServiceImpl;
 import java.sql.SQLException;
 
 public class Main {
-    private final static UserService userService = new UserServiceImpl();
-    public static void main(String[] args) throws SQLException {
+    private static final UserService userService = new UserServiceImpl();
+    public static void main(String[] args)  throws SQLException {
 
         userService.createUsersTable();
         userService.saveUser("Alexey", "Moskalev", (byte) 29);
